@@ -836,15 +836,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tiles:
-  - {fileID: 9053435975888417904, guid: 7947404d5f8964f51a61721b99223a53, type: 3}
-  - {fileID: 441274292419412008, guid: b4774f5fd924241c6a02efcf138948d8, type: 3}
-  - {fileID: 2789583354197137033, guid: 8c8574d16e47a4ed78e258f97d09c52d, type: 3}
-  - {fileID: 2985044300030958394, guid: 2f23a40e94e9b4ec88351c798804bb6d, type: 3}
-  - {fileID: 5200592555468245029, guid: 13e98c86d0cb546608e0184a2f3b1e30, type: 3}
-  - {fileID: 6124885337986415471, guid: 2bbd8f65f36f14ddbbdc3e6640fd01e9, type: 3}
-  - {fileID: 6824790478083298773, guid: 50aee0525b2a34353a6fb3b775b6645b, type: 3}
-  - {fileID: 8208961445018728229, guid: ccc3a64cdafba4ff88658f73ef4ac5fb, type: 3}
-  - {fileID: 581212233009430046, guid: 8806dbe3709824786ad837e9ce9088d5, type: 3}
+  - {fileID: 0}
+  - {fileID: 2427757657879208128, guid: d2bc1f4b0aebc43e1a2adf7184a43e7b, type: 3}
+  - {fileID: 1271543488705363537, guid: e194d3ef451b14fa98ec4dbd51d242cb, type: 3}
+  - {fileID: 6577462101548914981, guid: aecb5967b21d74f54b2e870a0658e192, type: 3}
+  - {fileID: 1790537557124629, guid: a21b7e91ec7c2488a88bb55e6f13050f, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 4787119899327896027, guid: 20a76041e66884d018d22b62a6ec614a, type: 3}
   pellets: []
 --- !u!4 &1729768517
 Transform:
