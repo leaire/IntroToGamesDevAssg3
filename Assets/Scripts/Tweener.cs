@@ -24,11 +24,11 @@ public class Tweener : MonoBehaviour
 
         if (activeTween != null)
         {
-            if (Vector2.Distance(activeTween.Target.position, activeTween.EndPos) > 0.05f)
+            if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.05f)
             {
                 // Lerp towards
                 timer += (Time.deltaTime) / activeTween.Duration;
-                gameObject.transform.position = Vector2.Lerp(activeTween.StartPos, activeTween.EndPos, timer);
+                gameObject.transform.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, timer);
                 //Debug.Log("Lerp completed");
             }
             else
@@ -41,7 +41,7 @@ public class Tweener : MonoBehaviour
         }
     }
 
-    public /*bool*/ void AddTween(Transform targetObject, Vector2 startPos, Vector2 endPos, float speed)
+    public /*bool*/ void AddTween(Transform targetObject, Vector3 startPos, Vector3 endPos, float speed)
     {
         /*if (!TweenExists())
         {*/

@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
         animator = GetComponent<Animator>();
         spriterenderer = GetComponent<SpriteRenderer>();
         source = GetComponent<AudioSource>();
-        gameObject.transform.position = new Vector2(-4.5f * s, 3.5f * s);
+        gameObject.transform.position = new Vector3(-4.5f * s, 3.5f * s, -1f);
     }
 
     // Update is called once per frame
@@ -37,13 +37,13 @@ public class InputManager : MonoBehaviour
                 {
                     if (gameObject.transform.position.y > 0.0f)
                     {
-                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(4.5f * s, -2.5f * s), 7.0f);
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector3(4.5f * s, -2.5f * s, -1f), 7.0f);
                         animator.SetTrigger("Down");
                         //Debug.Log("Tween added");
                     }
                     else
                     {
-                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(-4.5f * s, -2.5f * s), 7.0f);
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector3(-4.5f * s, -2.5f * s, -1f), 7.0f);
                         //Debug.Log("Tween added");
                         animator.SetTrigger("Left");
                     }
@@ -52,13 +52,13 @@ public class InputManager : MonoBehaviour
                 {
                     if (gameObject.transform.position.y > 0.0f)
                     {
-                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(4.5f * s, 3.5f * s), 7.0f);
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector3(4.5f * s, 3.5f * s, -1f), 7.0f);
                         //Debug.Log("Tween added");
                         animator.SetTrigger("Right");
                     }
                     else
                     {
-                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(-4.5f * s, 3.5f * s), 7.0f);
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector3(-4.5f * s, 3.5f * s, -1f), 7.0f);
                         //Debug.Log("Tween added");
                         animator.SetTrigger("Up");
                     }
