@@ -48,7 +48,9 @@ public class LevelGenerator : MonoBehaviour
         int e = 0;
         int w = 0;
         float rotation = 0.0f;
-        int quad = 0;
+        //int quad = 0;
+        bool inverse;
+        int exc;
         int rowChange = 0;
         GameObject temp;
         //int x = 1;
@@ -71,6 +73,26 @@ public class LevelGenerator : MonoBehaviour
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     };
+
+        int[,] exceptions =
+        {
+            {2,5},
+            {2,11},
+            {4,2},
+            {4,7},
+            {4,13},
+            {6,5},
+            {6,8},
+            {7, 2},
+            {7, 10},
+            {7, 13},
+            {9, 0},
+            {9, 5},
+            {9, 8},
+            {9, 11},
+            {10, 13},
+            {13, 7},
+        };
 
         //Determine sprite and rotation of tile
         /*while (quad < 4)
@@ -147,8 +169,8 @@ public class LevelGenerator : MonoBehaviour
                 Array.Reverse(activeLevelMap);
             }*/
 
-            foreach (int i in levelMap)
-            {
+        foreach (int i in levelMap)
+        {
                 rotation = 0.0f;
 
                 // Sets values of adjacent tiles
@@ -343,6 +365,19 @@ public class LevelGenerator : MonoBehaviour
             // Instantiate tile
             if (tiles[i] != null) // (i != 0 || i != 5 || i != 6)
             {
+                // Manually fixes inverted tiles using the array called exceptions
+                inverse = false;
+                exc = 0;
+                while (exc < 16) {
+                    if ((row == exceptions[exc, 0]) && (column == exceptions[exc, 1]))
+                    {
+                        inverse = true;
+                        //Debug.Log(exc + ": Set inverse true for exception ");
+                        break; // Just breaks the while loop, right?
+                    }
+                    exc++;
+                }
+
                 temp = Instantiate(tiles[i], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.parent = gameObject.transform;
@@ -366,13 +401,13 @@ public class LevelGenerator : MonoBehaviour
                 {
                     temp.transform.localScale = new Vector3(-1f, 1f, 1f);
                 }*/
-                temp.transform.localScale = new Vector3(-1f, 1f, 1f);
+                if (inverse) { temp.transform.localScale = new Vector3(1f, -1f, 1f); /*Debug.Log(exc + ": Top-Right instance inverted");*/ }
+                else { temp.transform.localScale = new Vector3(-1f, 1f, 1f); }
 
                 temp = Instantiate(tiles[i], new Vector2((column * dis + startX) + (2*moveX) - 1.395f, ((startY - row * dis)) - (2*moveY)), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.localScale = new Vector3(-1f, -1f, 1f);
                 temp.transform.parent = gameObject.transform;
-
 
                 temp = Instantiate(tiles[i], new Vector2(column * dis + startX, ((startY - row * dis)) - (2*moveY)), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
@@ -390,32 +425,45 @@ public class LevelGenerator : MonoBehaviour
                 {
                     temp.transform.localScale = new Vector3(-1f, 1f, 1f);
                 }*/
-                temp.transform.localScale = new Vector3(1f, -1f, 1f);
+                if (inverse) { temp.transform.localScale = new Vector3(-1f, 1f, 1f); /*Debug.Log(exc + ": Bottom-Left instance inverted");*/ }
+                else { temp.transform.localScale = new Vector3(1f, -1f, 1f); }
 
             }
 
             // Instantiate pellet
             if (i == 5)
-                {
-                    ;
-                }
-                else if (i == 6)
-                {
-                    ;
-                }
+            {
+                moveX = (0.6975f - (column * dis + startX));
+                moveY = (0.6975f + (startY - row * dis));
 
-                // Debug.Log("Row: " + row + ", Column: " + column + ", n/s/e/w: " + n + "/" + s + "/" + e + "/" + w + ", Rotation: " + rotation + ", Tile: " + i);
+                Instantiate(pellets[0], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
+                Instantiate(pellets[0], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, startY - row * dis), Quaternion.identity);
+                Instantiate(pellets[0], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                Instantiate(pellets[0], new Vector2(column * dis + startX, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+            }
+            else if (i == 6)
+            {
+                moveX = (0.6975f - (column * dis + startX));
+                moveY = (0.6975f + (startY - row * dis));
 
-                // Reset/Increment variables
-                column++;
-                // x = 1;
-                // y = 1;
+                Instantiate(pellets[1], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
+                Instantiate(pellets[1], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, startY - row * dis), Quaternion.identity);
+                Instantiate(pellets[1], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                Instantiate(pellets[1], new Vector2(column * dis + startX, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+            }
 
-                if (column == 14)
-                {
+            // Debug.Log("Row: " + row + ", Column: " + column + ", n/s/e/w: " + n + "/" + s + "/" + e + "/" + w + ", Rotation: " + rotation + ", Tile: " + i);
+
+            // Reset/Increment variables
+            column++;
+            // x = 1;
+            // y = 1;
+
+            if (column == 14)
+            {
                     column = 0;
                     row++;
-                }
+            }
             }
 
             /*quad++;
