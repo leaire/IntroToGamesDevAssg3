@@ -4,63 +4,81 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
-    [SerializeField]
-    GameObject initial;
-
-    List<GameObject> items = new List<GameObject>();
-
+    SpriteRenderer spriterenderer;
     Tweener tweener;
+    Animator animator;
+    float s = 1.395f;
+
+    [SerializeField]
+    AudioClip[] clips;
+
+    int currentClip;
+    AudioSource source;
+    float walk = 0.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         tweener = GetComponent<Tweener>();
-        items.Add(initial);
-        //items.FindLast().transform = new Vector3(0, 0.5f, 0);
+        animator = GetComponent<Animator>();
+        spriterenderer = GetComponent<SpriteRenderer>();
+        source = GetComponent<AudioSource>();
+        gameObject.transform.position = new Vector2(-4.5f * s, 3.5f * s);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (spriterenderer.enabled == true)
         {
-            items.Add(Instantiate(initial));
-            items[items.Count - 1].transform.position = new Vector3(0, 0.5f, 0);
-        }
-
-        if (items != null)
-        {
-            foreach (GameObject item in items)
+            if (!tweener.TweenExists())
             {
-                if (Input.GetKeyDown(KeyCode.A))
+                if (gameObject.transform.position.x > 0.0f)
                 {
-                    if (tweener.AddTween(item.transform, item.transform.position, new Vector3(-2.0f, 0.5f, 0.0f), 1.5f))
+                    if (gameObject.transform.position.y > 0.0f)
                     {
-                        break;
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(4.5f * s, -2.5f * s), 7.0f);
+                        animator.SetTrigger("Down");
+                        //Debug.Log("Tween added");
+                    }
+                    else
+                    {
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(-4.5f * s, -2.5f * s), 7.0f);
+                        //Debug.Log("Tween added");
+                        animator.SetTrigger("Left");
                     }
                 }
-                if (Input.GetKeyDown(KeyCode.D))
+                else
                 {
-                    if (tweener.AddTween(item.transform, item.transform.position, new Vector3(2.0f, 0.5f, 0.0f), 1.5f))
+                    if (gameObject.transform.position.y > 0.0f)
                     {
-                        break;
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(4.5f * s, 3.5f * s), 7.0f);
+                        //Debug.Log("Tween added");
+                        animator.SetTrigger("Right");
                     }
-                }
-                if (Input.GetKeyDown(KeyCode.S))
-                {
-                    if (tweener.AddTween(item.transform, item.transform.position, new Vector3(0.0f, 0.5f, -2.0f), 0.5f))
+                    else
                     {
-                        break;
-                    }
-                }
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    if (tweener.AddTween(item.transform, item.transform.position, new Vector3(0.0f, 0.5f, 2.0f), 0.5f))
-                    {
-                        break;
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(-4.5f * s, 3.5f * s), 7.0f);
+                        //Debug.Log("Tween added");
+                        animator.SetTrigger("Up");
                     }
                 }
             }
+            else if (walk > 0.25f)
+            {
+                if (currentClip == 0)
+                {
+                    currentClip = 1;
+                }
+                else
+                {
+                    currentClip = 0;
+                }
+                source.clip = clips[currentClip];
+                source.Play();
+                walk = 0.0f;
+            }
+            walk += Time.deltaTime;
         }
     }
 }

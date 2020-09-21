@@ -6,10 +6,20 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
+    AudioSource audiosource;
+
     [SerializeField]
     GameObject[] tiles;
     [SerializeField]
     GameObject[] pellets;
+    [SerializeField]
+    AudioClip audioclip;
+    [SerializeField]
+    GameObject ready;
+    [SerializeField]
+    GameObject life;
+    [SerializeField]
+    GameObject star;
 
     int[,] levelMap =
     {
@@ -38,9 +48,13 @@ public class LevelGenerator : MonoBehaviour
     float moveX = 0.0f;
     float moveY = 0.0f;
 
+    bool introOver = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        audiosource = GetComponent<AudioSource>();
+
         int column = 0;
         int row = 0;
         int n = 0;
@@ -462,20 +476,28 @@ public class LevelGenerator : MonoBehaviour
                 moveX = (0.6975f - (column * dis + startX));
                 moveY = (0.6975f + (startY - row * dis));
 
-                Instantiate(pellets[0], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
-                Instantiate(pellets[0], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, startY - row * dis), Quaternion.identity);
-                Instantiate(pellets[0], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
-                Instantiate(pellets[0], new Vector2(column * dis + startX, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                temp = Instantiate(pellets[0], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
+                temp = Instantiate(pellets[0], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, startY - row * dis), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
+                temp = Instantiate(pellets[0], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
+                temp = Instantiate(pellets[0], new Vector2(column * dis + startX, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
             }
             else if (i == 6)
             {
                 moveX = (0.6975f - (column * dis + startX));
                 moveY = (0.6975f + (startY - row * dis));
 
-                Instantiate(pellets[1], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
-                Instantiate(pellets[1], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, startY - row * dis), Quaternion.identity);
-                Instantiate(pellets[1], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
-                Instantiate(pellets[1], new Vector2(column * dis + startX, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                temp = Instantiate(pellets[1], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
+                temp = Instantiate(pellets[1], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, startY - row * dis), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
+                temp = Instantiate(pellets[1], new Vector2((column * dis + startX) + (2 * moveX) - 1.395f, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
+                temp = Instantiate(pellets[1], new Vector2(column * dis + startX, ((startY - row * dis)) - (2 * moveY)), Quaternion.identity);
+                temp.transform.parent = gameObject.transform;
             }
 
             // Debug.Log("Row: " + row + ", Column: " + column + ", n/s/e/w: " + n + "/" + s + "/" + e + "/" + w + ", Rotation: " + rotation + ", Tile: " + i);
@@ -493,6 +515,8 @@ public class LevelGenerator : MonoBehaviour
             }
             }
 
+        StartCoroutine(getReady());
+
             /*quad++;
         }*/
     }
@@ -500,7 +524,50 @@ public class LevelGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (!audiosource.isPlaying && audiosource.clip != audioclip)
+        {
+            introOver = true;
+            audiosource.clip = audioclip;
+            audiosource.loop = true;
+            audiosource.Play();
+
+            GameObject[] actors = GameObject.FindGameObjectsWithTag("Actor");
+            foreach (GameObject actor in actors)
+            {
+                SpriteRenderer rend = actor.GetComponent<SpriteRenderer>();
+                Animator anim = actor.GetComponent<Animator>();
+                //InputManager inp = actor.GetComponent<InputManager>();
+                anim.enabled = true;
+                rend.enabled = true;
+                //inp.enabled = true;
+            }
+
+            GameObject temp;
+            temp = Instantiate(life, new Vector2(-22f, -19.5f), Quaternion.identity);
+            temp.transform.parent = gameObject.transform;
+            temp = Instantiate(life, new Vector2(-22, -17f), Quaternion.identity);
+            temp.transform.parent = gameObject.transform;
+            temp = Instantiate(life, new Vector2(-22f, -14.5f), Quaternion.identity);
+            temp.transform.parent = gameObject.transform;
+            temp = Instantiate(star, new Vector2(22f, -19.5f), Quaternion.identity);
+            temp.transform.localScale = new Vector2(1.5f, 1.5f);
+            temp.transform.parent = gameObject.transform;
+        }
+    }
+
+    IEnumerator getReady()
+    {
+        GameObject temp = Instantiate(ready);
+        temp.transform.parent = gameObject.transform;
+        //float timer = 0.0f;
+
+        while (!introOver)
+        {
+            //timer += Time.deltaTime;
+            yield return null;
+        }
+
+        temp.SetActive(false);
     }
 
     int countAdjacent(int i, int n, int s, int e, int w)
