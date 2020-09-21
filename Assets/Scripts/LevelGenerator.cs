@@ -52,6 +52,7 @@ public class LevelGenerator : MonoBehaviour
         bool inverse;
         int exc;
         int rowChange = 0;
+        int cornerFudge = 0;
         GameObject temp;
         //int x = 1;
         //int y = 1;
@@ -76,6 +77,7 @@ public class LevelGenerator : MonoBehaviour
 
         int[,] exceptions =
         {
+            // Corner Pieces
             {2,5},
             {2,11},
             {4,2},
@@ -92,6 +94,28 @@ public class LevelGenerator : MonoBehaviour
             {9, 11},
             {10, 13},
             {13, 7},
+            // Straight Pieces
+            {1, 13},
+            {2, 13},
+            {3, 2},
+            {3, 5},
+            {3, 7},
+            {3, 11},
+            {3, 13},
+            {7, 7},
+            {7, 8},
+            {8, 7},
+            {8, 8},
+            {8, 13},
+            {9, 7},
+            {9, 13},
+            {10, 7},
+            {11, 7},
+            {11, 8},
+            {12, 7},
+            {12, 8},
+            {13, 10},
+            {14, 10},
         };
 
         //Determine sprite and rotation of tile
@@ -275,6 +299,8 @@ public class LevelGenerator : MonoBehaviour
                         else if (se == 0 || se == 5 || se == 6) { rotation = 180.0f; }
                         else if (nw == 0 || nw == 5 || nw == 6) { rotation = 0.0f; }
                         else /*(sw == 0 || sw == 5 || sw == 6)*/ { rotation = 90.0f; }
+
+                        cornerFudge = 5;
                     }
                 }
 
@@ -368,7 +394,7 @@ public class LevelGenerator : MonoBehaviour
                 // Manually fixes inverted tiles using the array called exceptions
                 inverse = false;
                 exc = 0;
-                while (exc < 16) {
+                while (exc < 37) {
                     if ((row == exceptions[exc, 0]) && (column == exceptions[exc, 1]))
                     {
                         inverse = true;
@@ -378,14 +404,14 @@ public class LevelGenerator : MonoBehaviour
                     exc++;
                 }
 
-                temp = Instantiate(tiles[i], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
+                temp = Instantiate(tiles[i + cornerFudge], new Vector2(column * dis + startX, startY - row * dis), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.parent = gameObject.transform;
 
                 moveX = (0.6975f - temp.transform.position.x);
                 moveY = (0.6975f + temp.transform.position.y);
 
-                temp = Instantiate(tiles[i], new Vector2((column * dis + startX) + (2*moveX) - 1.395f, startY - row * dis), Quaternion.identity);
+                temp = Instantiate(tiles[i + cornerFudge], new Vector2((column * dis + startX) + (2*moveX) - 1.395f, startY - row * dis), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.parent = gameObject.transform;
                 /*if (((i == 1) && (temp.transform.rotation.z == 90.00001f)) || ((i == 3) && (temp.transform.rotation.z == 90.00001f)))
@@ -404,12 +430,12 @@ public class LevelGenerator : MonoBehaviour
                 if (inverse) { temp.transform.localScale = new Vector3(1f, -1f, 1f); /*Debug.Log(exc + ": Top-Right instance inverted");*/ }
                 else { temp.transform.localScale = new Vector3(-1f, 1f, 1f); }
 
-                temp = Instantiate(tiles[i], new Vector2((column * dis + startX) + (2*moveX) - 1.395f, ((startY - row * dis)) - (2*moveY)), Quaternion.identity);
+                temp = Instantiate(tiles[i + cornerFudge], new Vector2((column * dis + startX) + (2*moveX) - 1.395f, ((startY - row * dis)) - (2*moveY)), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.localScale = new Vector3(-1f, -1f, 1f);
                 temp.transform.parent = gameObject.transform;
 
-                temp = Instantiate(tiles[i], new Vector2(column * dis + startX, ((startY - row * dis)) - (2*moveY)), Quaternion.identity);
+                temp = Instantiate(tiles[i + cornerFudge], new Vector2(column * dis + startX, ((startY - row * dis)) - (2*moveY)), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.parent = gameObject.transform;
                 /*if (((i == 1) && (temp.transform.rotation.z == 90.00001f)) || ((i == 3) && (temp.transform.rotation.z == 90.00001f)))
@@ -456,6 +482,7 @@ public class LevelGenerator : MonoBehaviour
 
             // Reset/Increment variables
             column++;
+            cornerFudge = 0;
             // x = 1;
             // y = 1;
 
