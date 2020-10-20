@@ -132,81 +132,6 @@ public class LevelGenerator : MonoBehaviour
             {14, 10},
         };
 
-        //Determine sprite and rotation of tile
-        /*while (quad < 4)
-        {
-            rowChange = quad / 2;
-
-            int count = 0;
-            int countRow = 0;
-            if (quad == 0)
-            {
-                startX = -20.2275f;
-                foreach (int num in levelMap)
-                {
-                    activeLevelMap[countRow, count] = num;
-                    count++;
-                    countRow = count / 14;
-                }
-            }
-            if (quad == 1)
-            {
-                startX = dis;
-                foreach (int num in levelMap)
-                {
-                    activeLevelMap[countRow, 14 - count] = num;
-                    count++;
-                    countRow = count / 14;
-                }
-            }
-            if (quad == 2)
-            {
-                activeLevelMap = new int[,]
-            {
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-                {0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-            };
-                startY = -dis;
-                foreach (int num in levelMap)
-                {
-                    activeLevelMap[countRow, 14 - count] = num;
-                    count++;
-                    countRow = count / 14;
-                    if (countRow > 13)
-                    {
-                        break;
-                    }
-                }
-                Array.Reverse(activeLevelMap);
-            }
-            if (quad == 3)
-            {
-                startX = -20.2275f;
-                foreach (int num in levelMap)
-                {
-                    activeLevelMap[countRow, count] = num;
-                    count++;
-                    countRow = count / 14;
-                    if (countRow > 13)
-                    {
-                        break;
-                    }
-                }
-                Array.Reverse(activeLevelMap);
-            }*/
-
         foreach (int i in levelMap)
         {
                 rotation = 0.0f;
@@ -428,19 +353,7 @@ public class LevelGenerator : MonoBehaviour
                 temp = Instantiate(tiles[i + cornerFudge], new Vector2((column * dis + startX) + (2*moveX) - 1.395f, startY - row * dis), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.parent = gameObject.transform;
-                /*if (((i == 1) && (temp.transform.rotation.z == 90.00001f)) || ((i == 3) && (temp.transform.rotation.z == 90.00001f)))
-                { temp.transform.localScale = new Vector3(1f, -1f, 1f); }
-                else
-                { temp.transform.localScale = new Vector3(-1f, 1f, 1f); }*/
-                /*if (i == 3 && Mathf.Abs(rotation) == 90.0f)
-                {
-                    temp.transform.localScale = new Vector3(1f, 1f, 1f);
-                    temp.transform.Rotate(new Vector3(0f, 0f, rotation + 180.0f));
-                }
-                else
-                {
-                    temp.transform.localScale = new Vector3(-1f, 1f, 1f);
-                }*/
+                
                 if (inverse) { temp.transform.localScale = new Vector3(1f, -1f, 1f); /*Debug.Log(exc + ": Top-Right instance inverted");*/ }
                 else { temp.transform.localScale = new Vector3(-1f, 1f, 1f); }
 
@@ -452,19 +365,7 @@ public class LevelGenerator : MonoBehaviour
                 temp = Instantiate(tiles[i + cornerFudge], new Vector2(column * dis + startX, ((startY - row * dis)) - (2*moveY)), Quaternion.identity);
                 temp.transform.Rotate(new Vector3(0f, 0f, rotation));
                 temp.transform.parent = gameObject.transform;
-                /*if (((i == 1) && (temp.transform.rotation.z == 90.00001f)) || ((i == 3) && (temp.transform.rotation.z == 90.00001f)))
-                { temp.transform.localScale = new Vector3(1f, -1f, 1f); }
-                else
-                { temp.transform.localScale = new Vector3(-1f, 1f, 1f); }*/
-                /*if (i == 3 && Mathf.Abs(rotation) == 90.0f)
-                {
-                    temp.transform.localScale = new Vector3(1f, 1f, 1f);
-                    temp.transform.Rotate(new Vector3(0f, 0f, rotation + 180.0f));
-                }
-                else
-                {
-                    temp.transform.localScale = new Vector3(-1f, 1f, 1f);
-                }*/
+                
                 if (inverse) { temp.transform.localScale = new Vector3(-1f, 1f, 1f); /*Debug.Log(exc + ": Bottom-Left instance inverted");*/ }
                 else { temp.transform.localScale = new Vector3(1f, -1f, 1f); }
 
@@ -516,9 +417,6 @@ public class LevelGenerator : MonoBehaviour
             }
 
         StartCoroutine(getReady());
-
-            /*quad++;
-        }*/
     }
 
     // Update is called once per frame
