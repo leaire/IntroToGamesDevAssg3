@@ -440,7 +440,7 @@ public class LevelGenerator : MonoBehaviour
                 //inp.enabled = true;
             }
 
-            GameObject temp;
+            /*GameObject temp;
             temp = Instantiate(life, new Vector2(-22f, -19.5f), Quaternion.identity);
             temp.transform.parent = gameObject.transform;
             temp = Instantiate(life, new Vector2(-22, -17f), Quaternion.identity);
@@ -449,7 +449,7 @@ public class LevelGenerator : MonoBehaviour
             temp.transform.parent = gameObject.transform;
             temp = Instantiate(star, new Vector2(22f, -19.5f), Quaternion.identity);
             temp.transform.localScale = new Vector2(1.5f, 1.5f);
-            temp.transform.parent = gameObject.transform;
+            temp.transform.parent = gameObject.transform;*/
         }
     }
 
