@@ -11,6 +11,8 @@ public class PacStudentController : MonoBehaviour
     int currentClip;
     AudioSource source;
     float walk = 0.0f;
+    [SerializeField]
+    ParticleSystem dust;
 
     enum Direction { Up, Down, Left, Right };
 
@@ -182,9 +184,24 @@ public class PacStudentController : MonoBehaviour
                     setAdjacent(-dis, 0);
                 }
             }
+            else
+            {
+                animator.speed = 0;
+                dust.Stop();
+            }
+        }
+        else
+        {
+            walk += Time.deltaTime;
+            if (animator.speed != 1) animator.speed = 1;
+            if (dust.isStopped) dust.Play();
+            if (currentInput == Direction.Up)       { dust.transform.localRotation = Quaternion.Euler(30, 180, 0); }
+            if (currentInput == Direction.Down)     { dust.transform.localRotation = Quaternion.Euler(-70, 0, 0); }
+            if (currentInput == Direction.Right)    { dust.transform.localRotation = Quaternion.Euler(-20, -90, 0); }
+            if (currentInput == Direction.Left)     { dust.transform.localRotation = Quaternion.Euler(-20, 90, 0); }
         }
 
-        /*else if (walk > 0.25f)
+        if (walk > 0.25f)
         {
             if (currentClip == 0)
             {
@@ -198,7 +215,7 @@ public class PacStudentController : MonoBehaviour
             source.Play();
             walk = 0.0f;
         }
-        walk += Time.deltaTime;*/
+        
     }
 
     bool isWalkable(int direction)
