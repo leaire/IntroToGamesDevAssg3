@@ -188,7 +188,7 @@ public class PacStudentController : MonoBehaviour
             {
                 animator.speed = 0;
                 dust.Stop();
-                walk = 0.0f;
+                walk = 0.24f;
             }
         }
         else

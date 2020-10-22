@@ -5551,7 +5551,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f32c06f6c29747eb9735bbffc638784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clips: []
+  clips:
+  - {fileID: 8300000, guid: 27bc49c6518644190816c5a043b7740b, type: 3}
+  - {fileID: 8300000, guid: 7d57b4ba4855b460db726da5ba7cea80, type: 3}
   dust: {fileID: 21688256}
 --- !u!82 &630239815
 AudioSource:
@@ -6866,6 +6868,8 @@ GameObject:
   - component: {fileID: 1729768516}
   - component: {fileID: 1729768518}
   - component: {fileID: 1729768519}
+  - component: {fileID: 1729768521}
+  - component: {fileID: 1729768520}
   m_Layer: 0
   m_Name: Level Generator
   m_TagString: Untagged
@@ -7024,6 +7028,33 @@ MonoBehaviour:
   ready: {fileID: 9022535402504681646, guid: 2a83369141c904687875c99e7e56ed07, type: 3}
   life: {fileID: 6555795855083568156, guid: 1b62a73ce38d8492280daa28a28ef4eb, type: 3}
   star: {fileID: 1879653285411723872, guid: 292910817c2ea4e7da907b2f45598921, type: 3}
+--- !u!114 &1729768520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729768515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca098d0290864bea915569884250892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1729768521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729768515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be3428fd1c24941e7a406fba55470990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cherry: {fileID: 1879653285411723872, guid: 292910817c2ea4e7da907b2f45598921, type: 3}
+  waitTime: 30
+  cherrySpeed: 3.5
 --- !u!1 &1814670834
 GameObject:
   m_ObjectHideFlags: 0

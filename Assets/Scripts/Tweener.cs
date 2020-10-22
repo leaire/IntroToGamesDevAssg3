@@ -7,6 +7,7 @@ public class Tweener : MonoBehaviour
     Tween activeTween = null;
     //Animator animator;
     float timer = 0.0f;
+    GameObject activeObject;
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +29,7 @@ public class Tweener : MonoBehaviour
             {
                 // Lerp towards
                 timer += (Time.deltaTime) / activeTween.Duration;
-                gameObject.transform.position = Vector2.Lerp(activeTween.StartPos, activeTween.EndPos, timer);
+                activeObject.transform.position = Vector2.Lerp(activeTween.StartPos, activeTween.EndPos, timer);
                 //Debug.Log("Lerp completed");
             }
             else
@@ -44,6 +45,13 @@ public class Tweener : MonoBehaviour
     public void AddTween(Transform targetObject, Vector2 startPos, Vector2 endPos, float speed)
     {
         activeTween = new Tween(targetObject, startPos, endPos, Time.time, speed);
+        activeObject = gameObject;
+    }
+
+    public void AddTween(GameObject target, Transform targetObject, Vector2 startPos, Vector2 endPos, float speed)
+    {
+        activeTween = new Tween(targetObject, startPos, endPos, Time.time, speed);
+        activeObject = target;
     }
 
     public bool TweenExists()
