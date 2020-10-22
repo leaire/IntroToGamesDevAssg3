@@ -15,6 +15,8 @@ public class PacStudentController : MonoBehaviour
     ParticleSystem dust;
     [SerializeField]
     ParticleSystem wallImpact;
+    [SerializeField]
+    UIManager ui;
 
     enum Direction { Up, Down, Left, Right };
 
@@ -241,11 +243,12 @@ public class PacStudentController : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collision detected!");
-        GameObject temp = collision.gameObject;
-        // if (temp.CompareTag("Pellet"))
+        // Debug.Log("Collision detected!");
+        GameObject temp = other.gameObject;
+        if (temp.CompareTag("Pellet"))
+            ui.IncreaseScore(10);
             Destroy(temp);
     }
 
