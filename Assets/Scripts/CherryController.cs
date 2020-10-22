@@ -14,6 +14,10 @@ public class CherryController : MonoBehaviour
     float cherrySpeed = 3.5f;
     GameObject activeCherry;
     Tweener tweener;
+    [SerializeField]
+    GameStateManager state;
+    [SerializeField]
+    LevelGenerator level;
 
     // Start is called before the first frame update
     void Start()
@@ -25,17 +29,20 @@ public class CherryController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Increment timer
-        elapsedTime += Time.deltaTime;
-
-        // Spawn cherry after set time (and resets timer)
-        if (elapsedTime > waitTime && !tweener.TweenExists())
+        if (state.state == GameStateManager.GameState.Walking || state.state == GameStateManager.GameState.Scared)
         {
-            spawnCherry();
-            elapsedTime -= waitTime;
-            // Debug.Log("Cherry spawned");
+            // Increment timer
+            elapsedTime += Time.deltaTime;
+
+            // Spawn cherry after set time (and resets timer)
+            if (elapsedTime > waitTime && !tweener.TweenExists())
+            {
+                spawnCherry();
+                elapsedTime -= waitTime;
+                // Debug.Log("Cherry spawned");
+            }
+            Debug.Log("Time until next cherry spawn: " + (waitTime - elapsedTime));
         }
-        // Debug.Log("Time until next cherry spawn: " + (waitTime - elapsedTime));
     }
 
     void spawnCherry()
@@ -54,7 +61,7 @@ public class CherryController : MonoBehaviour
 
         // Instantiate cherry
         activeCherry = Instantiate(cherry, new Vector2(x, y), Quaternion.identity);
-        activeCherry.transform.parent = gameObject.transform;
+        activeCherry.transform.parent = level.gameObject.transform;
 
         // Lerp spawned cherry
         tweener.AddTween(activeCherry, activeCherry.transform, activeCherry.transform.position, new Vector2(-x, -y), cherrySpeed);

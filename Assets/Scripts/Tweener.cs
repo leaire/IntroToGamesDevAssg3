@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,19 +26,27 @@ public class Tweener : MonoBehaviour
 
         if (activeTween != null)
         {
-            if (Vector2.Distance(activeTween.Target.position, activeTween.EndPos) > 0.05f)
+            try
             {
-                // Lerp towards
-                timer += (Time.deltaTime) / activeTween.Duration;
-                activeObject.transform.position = Vector2.Lerp(activeTween.StartPos, activeTween.EndPos, timer);
-                //Debug.Log("Lerp completed");
+                if (Vector2.Distance(activeTween.Target.position, activeTween.EndPos) > 0.05f)
+                {
+                    // Lerp towards
+                    timer += (Time.deltaTime) / activeTween.Duration;
+                    activeObject.transform.position = Vector2.Lerp(activeTween.StartPos, activeTween.EndPos, timer);
+                    //Debug.Log("Lerp completed");
+                }
+                else
+                {
+                    activeTween.Target.position = activeTween.EndPos;
+                    activeTween = null;
+                    timer = 0f;
+                    //Debug.Log("Tween nulled");
+                }
             }
-            else
+            catch (MissingReferenceException e)
             {
-                activeTween.Target.position = activeTween.EndPos;
                 activeTween = null;
                 timer = 0f;
-                //Debug.Log("Tween nulled");
             }
         }
     }

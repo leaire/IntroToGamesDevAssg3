@@ -17,6 +17,8 @@ public class PacStudentController : MonoBehaviour
     ParticleSystem wallImpact;
     [SerializeField]
     UIManager ui;
+    [SerializeField]
+    GameStateManager state;
 
     enum Direction { Up, Down, Left, Right };
 
@@ -53,194 +55,202 @@ public class PacStudentController : MonoBehaviour
     int row;
     float dis = 1.395f;
     int hor; int ver;
-    bool stopped = true;
+    bool stopped;
 
     // Start is called before the first frame update
     void Start()
     {
-        column = 1;
-        row = 1;
-        gameObject.transform.position = new Vector2(-12.5f * dis, 13.5f * dis);
         tweener = GetComponent<Tweener>();
         animator = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
         rend = GetComponent<SpriteRenderer>();
-        setAdjacent(0, 0);
-        currentInput = Direction.Left;
-        lastInput = Direction.Left;
-        animator.SetTrigger("Left");
-
-        animator.speed = 0;
-        dust.Stop();
-        walk = 0.24f;
+        Respawn();
     }
 
     // Update is called once per frame
     void Update()
     {
-        setInput();
-        rend.sortingOrder = (int) gameObject.transform.position.y;
-
-        if (!tweener.TweenExists())
+        if (state.state != GameStateManager.GameState.Intro && state.state != GameStateManager.GameState.Dead)
         {
-            if ((gameObject.transform.position.x) > 0) hor = 1;
-            else hor = -1;
-            if ((gameObject.transform.position.y) > 0) ver = 1;
-            else ver = -1;
+            setInput();
+            rend.sortingOrder = (int)gameObject.transform.position.y;
 
-            if (lastInput == Direction.Up && isWalkable(n))
+            if (!tweener.TweenExists())
             {
-                tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + dis), speed);
-                if (lastInput != currentInput)
-                    animator.SetTrigger("Up");
-                row -= ver;
-                setAdjacent(0, dis);
-                currentInput = lastInput;
-                stopped = false;
-            }
+                if ((gameObject.transform.position.x) > 0) hor = 1;
+                else hor = -1;
+                if ((gameObject.transform.position.y) > 0) ver = 1;
+                else ver = -1;
 
-            else if (lastInput == Direction.Down && isWalkable(s))
-            {
-                tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - dis), speed);
-                if (lastInput != currentInput)
-                    animator.SetTrigger("Down");
-                if (row == 14)
-                    row = 13;
-                else
-                    row += ver;
-                setAdjacent(0, -dis);
-                currentInput = lastInput;
-                stopped = false;
-            }
-
-            else if (lastInput == Direction.Right && isWalkable(e))
-            {
-                if (column == 0 && hor > 0)
+                if (lastInput == Direction.Up && isWalkable(n))
                 {
-                    gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
-                }
-                else
-                {
-                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x + dis, gameObject.transform.position.y), speed);
+                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + dis), speed);
                     if (lastInput != currentInput)
-                        animator.SetTrigger("Right");
-                    if (column < 13 || hor > 0)
-                        column -= hor;
-                    setAdjacent(dis, 0);
+                        animator.SetTrigger("Up");
+                    row -= ver;
+                    setAdjacent(0, dis);
                     currentInput = lastInput;
+                    stopped = false;
                 }
-                stopped = false;
-            }
 
-            else if (lastInput == Direction.Left && isWalkable(w))
-            {
-                if (column == 0 && hor < 0)
+                else if (lastInput == Direction.Down && isWalkable(s))
                 {
-                    gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
-                }
-                else
-                {
-                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x - dis, gameObject.transform.position.y), speed);
+                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - dis), speed);
                     if (lastInput != currentInput)
-                        animator.SetTrigger("Left");
-                    if (column < 13 || hor < 0)
-                        column += hor;
-                    setAdjacent(-dis, 0);
+                        animator.SetTrigger("Down");
+                    if (row == 14)
+                        row = 13;
+                    else
+                        row += ver;
+                    setAdjacent(0, -dis);
                     currentInput = lastInput;
+                    stopped = false;
                 }
-                stopped = false;
-            }
 
-            else if (currentInput == Direction.Up && isWalkable(n))
-            {
-                tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + dis), speed);
-                row -= ver;
-                setAdjacent(0, dis);
-                stopped = false;
-            }
-
-            else if (currentInput == Direction.Down && isWalkable(s))
-            {
-                tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - dis), speed);
-                if (row == 14)
-                    row = 13;
-                else
-                    row += ver;
-                setAdjacent(0, -dis);
-                stopped = false;
-            }
-
-            else if (currentInput == Direction.Right && isWalkable(e))
-            {
-                if (column == 0 && hor > 0)
+                else if (lastInput == Direction.Right && isWalkable(e))
                 {
-                    gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
+                    if (column == 0 && hor > 0)
+                    {
+                        gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
+                    }
+                    else
+                    {
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x + dis, gameObject.transform.position.y), speed);
+                        if (lastInput != currentInput)
+                            animator.SetTrigger("Right");
+                        if (column < 13 || hor > 0)
+                            column -= hor;
+                        setAdjacent(dis, 0);
+                        currentInput = lastInput;
+                    }
+                    stopped = false;
                 }
-                else
+
+                else if (lastInput == Direction.Left && isWalkable(w))
                 {
-                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x + dis, gameObject.transform.position.y), speed);
-                    if (column < 13 || hor > 0)
-                        column -= hor;
-                    setAdjacent(dis, 0);
+                    if (column == 0 && hor < 0)
+                    {
+                        gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
+                    }
+                    else
+                    {
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x - dis, gameObject.transform.position.y), speed);
+                        if (lastInput != currentInput)
+                            animator.SetTrigger("Left");
+                        if (column < 13 || hor < 0)
+                            column += hor;
+                        setAdjacent(-dis, 0);
+                        currentInput = lastInput;
+                    }
+                    stopped = false;
                 }
-                stopped = false;
-            }
 
-            else if (currentInput == Direction.Left && isWalkable(w))
-            {
-                if (column == 0 && hor < 0)
+                else if (currentInput == Direction.Up && isWalkable(n))
                 {
-                    gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
+                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + dis), speed);
+                    row -= ver;
+                    setAdjacent(0, dis);
+                    stopped = false;
                 }
-                else
+
+                else if (currentInput == Direction.Down && isWalkable(s))
                 {
-                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x - dis, gameObject.transform.position.y), speed);
-                    if (column < 13 || hor < 0)
-                        column += hor;
-                    setAdjacent(-dis, 0);
+                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - dis), speed);
+                    if (row == 14)
+                        row = 13;
+                    else
+                        row += ver;
+                    setAdjacent(0, -dis);
+                    stopped = false;
                 }
-                stopped = false;
-            }
-            else if (!stopped)
-            {
-                // Stopping player, resetting foot count
-                animator.speed = 0;
-                dust.Stop();
-                walk = 0.24f;
 
-                // Wall impact stuff
-                source.clip = clips[3];
-                source.Play();
-                playWallImpactParticle();
+                else if (currentInput == Direction.Right && isWalkable(e))
+                {
+                    if (column == 0 && hor > 0)
+                    {
+                        gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
+                    }
+                    else
+                    {
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x + dis, gameObject.transform.position.y), speed);
+                        if (column < 13 || hor > 0)
+                            column -= hor;
+                        setAdjacent(dis, 0);
+                    }
+                    stopped = false;
+                }
 
-                stopped = true;
-            }
-        }
-        else
-        {
-            walk += Time.deltaTime;
-            if (animator.speed != 1) animator.speed = 1;
-            if (dust.isStopped) dust.Play();
-            if (currentInput == Direction.Up)       { dust.transform.localRotation = Quaternion.Euler(30, 180, 0); }
-            if (currentInput == Direction.Down)     { dust.transform.localRotation = Quaternion.Euler(-70, 0, 0); }
-            if (currentInput == Direction.Right)    { dust.transform.localRotation = Quaternion.Euler(-20, -90, 0); }
-            if (currentInput == Direction.Left)     { dust.transform.localRotation = Quaternion.Euler(-20, 90, 0); }
-        }
+                else if (currentInput == Direction.Left && isWalkable(w))
+                {
+                    if (column == 0 && hor < 0)
+                    {
+                        gameObject.transform.position = new Vector2(gameObject.transform.position.x * -1, gameObject.transform.position.y);
+                    }
+                    else
+                    {
+                        tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x - dis, gameObject.transform.position.y), speed);
+                        if (column < 13 || hor < 0)
+                            column += hor;
+                        setAdjacent(-dis, 0);
+                    }
+                    stopped = false;
+                }
+                else if (!stopped)
+                {
+                    // Stopping player, resetting foot count
+                    animator.speed = 0;
+                    dust.Stop();
+                    walk = 0.24f;
 
-        if (walk > 0.25f)
-        {
-            if (currentClip == 0)
-            {
-                currentClip = 1;
+                    // Wall impact stuff
+                    source.clip = clips[3];
+                    source.Play();
+                    playWallImpactParticle();
+
+                    stopped = true;
+                }
             }
             else
             {
-                currentClip = 0;
+                walk += Time.deltaTime;
+                if (animator.speed != 1) animator.speed = 1;
+                if (dust.isStopped) dust.Play();
+                if (currentInput == Direction.Up) { dust.transform.localRotation = Quaternion.Euler(30, 180, 0); }
+                if (currentInput == Direction.Down) { dust.transform.localRotation = Quaternion.Euler(-70, 0, 0); }
+                if (currentInput == Direction.Right) { dust.transform.localRotation = Quaternion.Euler(-20, -90, 0); }
+                if (currentInput == Direction.Left) { dust.transform.localRotation = Quaternion.Euler(-20, 90, 0); }
             }
-            source.clip = clips[currentClip];
-            source.Play();
-            walk = 0.0f;
+
+            if (walk > 0.25f)
+            {
+                if (currentClip == 0)
+                {
+                    currentClip = 1;
+                }
+                else
+                {
+                    currentClip = 0;
+                }
+                source.clip = clips[currentClip];
+                source.Play();
+                walk = 0.0f;
+            }
         }
+    }
+
+    public void Respawn()
+    {
+        column = 1;
+        row = 1;
+        gameObject.transform.position = new Vector2(-12.5f * dis, 13.5f * dis);
+        setAdjacent(0, 0);
+        currentInput = Direction.Left;
+        lastInput = Direction.Left;
+        animator.SetTrigger("Left");
+        animator.speed = 0;
+        dust.Stop();
+        walk = 0.24f;
+        stopped = true;
     }
 
     void OnTriggerEnter(Collider other)
@@ -248,8 +258,34 @@ public class PacStudentController : MonoBehaviour
         // Debug.Log("Collision detected!");
         GameObject temp = other.gameObject;
         if (temp.CompareTag("Pellet"))
+        {
+            state.remainingPellets -= 1;
             ui.IncreaseScore(10);
             Destroy(temp);
+        }
+        if (temp.CompareTag("Cherry"))
+        {
+            ui.IncreaseScore(100);
+            Destroy(temp);
+        }
+        if (temp.CompareTag("PowerPellet"))
+        {
+            state.changeToScaredState();
+            Destroy(temp);
+        }
+        if (temp.CompareTag("Actor"))
+        {
+            if (temp.GetComponent<GhostController>().ghostState == GameStateManager.GameState.Walking)
+            {
+                state.KillPacman();
+                animator.SetTrigger("Dead");
+                source.clip = clips[3];
+                source.Play();
+                dust.Stop();
+                ParticleSystem death = Instantiate(wallImpact, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y), Quaternion.identity);
+                death.transform.localScale = new Vector2(1f, 1f);
+            }
+        }
     }
 
     bool isWalkable(int direction)
@@ -322,6 +358,6 @@ public class PacStudentController : MonoBehaviour
             x = -1.2f;
 
         // Instantiate particle system
-        ParticleSystem wall = Instantiate(wallImpact, new Vector2(gameObject.transform.position.x + x, gameObject.transform.position.y + y), Quaternion.identity);
+        Instantiate(wallImpact, new Vector2(gameObject.transform.position.x + x, gameObject.transform.position.y + y), Quaternion.identity);
     }
 }
