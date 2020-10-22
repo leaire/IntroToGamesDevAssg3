@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ButtonsManager : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -18,6 +18,7 @@ public class ButtonsManager : MonoBehaviour
         
     }
 
+    // Button methods
     public void OpenLevel1()
     {
         SceneManager.LoadScene(1);

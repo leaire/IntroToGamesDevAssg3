@@ -33,7 +33,7 @@ public class CherryController : MonoBehaviour
         {
             spawnCherry();
             elapsedTime -= waitTime;
-            Debug.Log("Cherry spawned");
+            // Debug.Log("Cherry spawned");
         }
         // Debug.Log("Time until next cherry spawn: " + (waitTime - elapsedTime));
     }

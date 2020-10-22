@@ -13,6 +13,8 @@ public class PacStudentController : MonoBehaviour
     float walk = 0.0f;
     [SerializeField]
     ParticleSystem dust;
+    [SerializeField]
+    ParticleSystem wallImpact;
 
     enum Direction { Up, Down, Left, Right };
 
@@ -49,6 +51,7 @@ public class PacStudentController : MonoBehaviour
     int row;
     float dis = 1.395f;
     int hor; int ver;
+    bool stopped = true;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +67,10 @@ public class PacStudentController : MonoBehaviour
         currentInput = Direction.Left;
         lastInput = Direction.Left;
         animator.SetTrigger("Left");
+
+        animator.speed = 0;
+        dust.Stop();
+        walk = 0.24f;
     }
 
     // Update is called once per frame
@@ -87,6 +94,7 @@ public class PacStudentController : MonoBehaviour
                 row -= ver;
                 setAdjacent(0, dis);
                 currentInput = lastInput;
+                stopped = false;
             }
 
             else if (lastInput == Direction.Down && isWalkable(s))
@@ -100,6 +108,7 @@ public class PacStudentController : MonoBehaviour
                     row += ver;
                 setAdjacent(0, -dis);
                 currentInput = lastInput;
+                stopped = false;
             }
 
             else if (lastInput == Direction.Right && isWalkable(e))
@@ -118,6 +127,7 @@ public class PacStudentController : MonoBehaviour
                     setAdjacent(dis, 0);
                     currentInput = lastInput;
                 }
+                stopped = false;
             }
 
             else if (lastInput == Direction.Left && isWalkable(w))
@@ -136,6 +146,7 @@ public class PacStudentController : MonoBehaviour
                     setAdjacent(-dis, 0);
                     currentInput = lastInput;
                 }
+                stopped = false;
             }
 
             else if (currentInput == Direction.Up && isWalkable(n))
@@ -143,6 +154,7 @@ public class PacStudentController : MonoBehaviour
                 tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + dis), speed);
                 row -= ver;
                 setAdjacent(0, dis);
+                stopped = false;
             }
 
             else if (currentInput == Direction.Down && isWalkable(s))
@@ -153,6 +165,7 @@ public class PacStudentController : MonoBehaviour
                 else
                     row += ver;
                 setAdjacent(0, -dis);
+                stopped = false;
             }
 
             else if (currentInput == Direction.Right && isWalkable(e))
@@ -168,6 +181,7 @@ public class PacStudentController : MonoBehaviour
                         column -= hor;
                     setAdjacent(dis, 0);
                 }
+                stopped = false;
             }
 
             else if (currentInput == Direction.Left && isWalkable(w))
@@ -183,12 +197,21 @@ public class PacStudentController : MonoBehaviour
                         column += hor;
                     setAdjacent(-dis, 0);
                 }
+                stopped = false;
             }
-            else
+            else if (!stopped)
             {
+                // Stopping player, resetting foot count
                 animator.speed = 0;
                 dust.Stop();
                 walk = 0.24f;
+
+                // Wall impact stuff
+                source.clip = clips[3];
+                source.Play();
+                playWallImpactParticle();
+
+                stopped = true;
             }
         }
         else
@@ -216,7 +239,14 @@ public class PacStudentController : MonoBehaviour
             source.Play();
             walk = 0.0f;
         }
-        
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Collision detected!");
+        GameObject temp = collision.gameObject;
+        // if (temp.CompareTag("Pellet"))
+            Destroy(temp);
     }
 
     bool isWalkable(int direction)
@@ -272,5 +302,23 @@ public class PacStudentController : MonoBehaviour
             lastInput = Direction.Down;
         if (Input.GetKeyDown(KeyCode.D))
             lastInput = Direction.Right;
+    }
+
+    void playWallImpactParticle()
+    {
+        // Determine offset from player
+        float x = 0;
+        float y = -0.8f;
+        if (currentInput == Direction.Up)
+            y = 0.6f;
+        if (currentInput == Direction.Down)
+            y = -2.4f;
+        if (currentInput == Direction.Right)
+            x = 1.2f;
+        if (currentInput == Direction.Left)
+            x = -1.2f;
+
+        // Instantiate particle system
+        ParticleSystem wall = Instantiate(wallImpact, new Vector2(gameObject.transform.position.x + x, gameObject.transform.position.y + y), Quaternion.identity);
     }
 }
