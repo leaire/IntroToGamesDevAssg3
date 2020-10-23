@@ -52,6 +52,8 @@ public class GameStateManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PlayDeathMusic();
+
         if (remainingPellets <= 0 && (state != GameState.GameOver))
         {
             EndGame();
@@ -199,5 +201,37 @@ public class GameStateManager : MonoBehaviour
             ghostTimer.text = "10";
         }
         ghostsAreRecovering = false;
+    }
+
+    void PlayDeathMusic()
+    {
+        if (state != GameState.GameOver)
+        {
+            int i = 0;
+            foreach (GameObject ghost in ghosts)
+            {
+                if (ghost.GetComponent<GhostController>().ghostState == GameState.Dead)
+                    i++;
+            }
+
+            if (i > 0 && audiosource.clip != clips[3])
+            {
+                audiosource.clip = clips[3];
+                audiosource.Play();
+            }
+            else if (i == 0 && audiosource.clip == clips[3])
+            {
+                if (state == GameState.Scared)
+                {
+                    audiosource.clip = clips[2];
+                    audiosource.Play();
+                }
+                else
+                {
+                    audiosource.clip = clips[1];
+                    audiosource.Play();
+                }
+            }
+        }
     }
 }
