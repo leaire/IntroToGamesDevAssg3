@@ -6,10 +6,9 @@ using UnityEngine;
 public class GhostController : MonoBehaviour
 {
     public GameStateManager.GameState ghostState;
+    GameStateManager.GameState prevState;
 
     // Walking audio variables
-    [SerializeField]
-    UIManager ui;
     [SerializeField]
     GameStateManager state;
     [SerializeField]
@@ -23,7 +22,7 @@ public class GhostController : MonoBehaviour
     Direction lastInput;
     Direction currentInput;
     [SerializeField]
-    Behaviour defualtBehaviour;
+    Behaviour defaultBehaviour;
     Behaviour behaviour;
     Tweener tweener;
     Animator animator;
@@ -66,11 +65,24 @@ public class GhostController : MonoBehaviour
     float[] adjacentDistance = new float[4];
     bool[] prevAdjacentWalkable = { false, false, false, false };
 
+    Direction[] clockwiseInstructionsToStart = { Direction.Right, Direction.Down, Direction.Down, Direction.Right, Direction.Right, Direction.Down, Direction.Down, Direction.Left, Direction.Left };
+    Direction[,] clockwiseInstructions =
+    {
+        { Direction.Down, Direction.Right, Direction.Up, Direction.Left, Direction.Up },
+        { Direction.Right, Direction.Up, Direction.Left, Direction.Down, Direction.Left },
+        { Direction.Up, Direction.Left, Direction.Down, Direction.Right, Direction.Down },
+        { Direction.Left, Direction.Down, Direction.Right, Direction.Up, Direction.Right },
+    };
+    int clockwiseQuad;
+    int clockwiseStep;
+    bool clockwiseStarted;
+
     // Start is called before the first frame update
     void Start()
     {
         ghostState = GameStateManager.GameState.Walking;
-        behaviour = defualtBehaviour;
+        prevState = ghostState;
+        behaviour = defaultBehaviour;
         tweener = GetComponent<Tweener>();
         animator = GetComponent<Animator>();
         rend = GetComponent<SpriteRenderer>();
@@ -87,9 +99,21 @@ public class GhostController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Debug.Log("Up: " + prevAdjacentWalkable[0].ToString() + ", Down: " + prevAdjacentWalkable[1].ToString() + ", Right: " + prevAdjacentWalkable[2].ToString() + ", Left: " + prevAdjacentWalkable[3].ToString());
+        Debug.Log("Ghost 1's state: " + ghostState);
 
-        if (state.state != GameStateManager.GameState.Intro && state.state != GameStateManager.GameState.Dead)
+        if (prevState != ghostState)
+        {
+            animator.SetInteger("GameState", (int)ghostState);
+            prevState = ghostState;
+        }
+
+        // Debug.Log("Up: " + prevAdjacentWalkable[0].ToString() + ", Down: " + prevAdjacentWalkable[1].ToString() + ", Right: " + prevAdjacentWalkable[2].ToString() + ", Left: " + prevAdjacentWalkable[3].ToString());
+        if (ghostState == GameStateManager.GameState.Dead)
+        {
+            ;
+        }
+
+        if (state.state != GameStateManager.GameState.Intro && ghostState != GameStateManager.GameState.Dead && state.state != GameStateManager.GameState.Dead)
         {
             rend.sortingOrder = (int)gameObject.transform.position.y;
 
@@ -287,20 +311,23 @@ public class GhostController : MonoBehaviour
 
     void setInput() // n/s/e/w for adjacentDistance[] 0/1/2/3
     {
-        if (column > 9 && row > 11) // If ghost is in spawn area, try and leave
+        if (column > 9 && row > 11) // If ghost is in spawn area…
         {
-            if (column < 13)
+            // Reset clockwise behaviour
+            clockwiseQuad = 0;
+            clockwiseStep = 0;
+            clockwiseStarted = false;
+
+            // Try and leave
+            if (xSpawnPosition > 0)
             {
-                if (hor > 0)
-                    lastInput = Direction.Left;
-                else lastInput = Direction.Right;
+                if (isWalkable(s)) lastInput = Direction.Down;
+                else lastInput = Direction.Left;
             }
             else
             {
-                if (row == 14)
-                    lastInput = (Direction)random.Next(0,1);
-                else lastInput = currentInput;
-                Debug.Log("Column = 13!");
+                if (isWalkable(n)) lastInput = Direction.Up;
+                else lastInput = Direction.Right;
             }
         }
         else
@@ -381,7 +408,20 @@ public class GhostController : MonoBehaviour
             }
             if (behaviour == Behaviour.Clockwise)
             {
-                ;
+                if (!clockwiseStarted)
+                {
+                    lastInput = clockwiseInstructionsToStart[clockwiseStep];
+                    clockwiseStep++;
+                    if (clockwiseStep >= clockwiseInstructionsToStart.Length)
+                    {
+                        clockwiseStarted = true;
+                        clockwiseStep = 0;
+                    }
+                }
+                else
+                {
+                    ;
+                }
             }
         }
     }

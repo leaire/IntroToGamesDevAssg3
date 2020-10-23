@@ -5091,13 +5091,16 @@ GameObject:
   - component: {fileID: 395399780}
   - component: {fileID: 395399779}
   - component: {fileID: 395399778}
+  - component: {fileID: 395399782}
+  - component: {fileID: 395399781}
+  - component: {fileID: 395399783}
   m_Layer: 0
   m_Name: Ghost 2
   m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &395399778
 Animator:
   serializedVersion: 3
@@ -5183,6 +5186,51 @@ Transform:
   m_Father: {fileID: 1814670835}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &395399781
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395399777}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Center: {x: 0, y: -1.4, z: 0}
+--- !u!114 &395399782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395399777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49bdb5112772640068639e6d6e11fce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostState: 0
+  state: {fileID: 1948867582}
+  player: {fileID: 630239812}
+  defaultBehaviour: 1
+  spawnColumn: 12
+  spawnRow: 14
+  xSpawnPosition: -1.5
+  ySpawnPosition: 0.5
+--- !u!114 &395399783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 395399777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca098d0290864bea915569884250892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &403452537
 GameObject:
   m_ObjectHideFlags: 0
@@ -5239,7 +5287,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 97505a7ac5bc04aa59e294064069138b, type: 3}
+    m_Font: {fileID: 12800000, guid: a3acd53f2f6ff48ab9b40812d807769c, type: 3}
     m_FontSize: 20
     m_FontStyle: 1
     m_BestFit: 0
@@ -5940,7 +5988,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 97505a7ac5bc04aa59e294064069138b, type: 3}
+    m_Font: {fileID: 12800000, guid: a3acd53f2f6ff48ab9b40812d807769c, type: 3}
     m_FontSize: 20
     m_FontStyle: 1
     m_BestFit: 0
@@ -5972,13 +6020,16 @@ GameObject:
   - component: {fileID: 886023927}
   - component: {fileID: 886023926}
   - component: {fileID: 886023925}
+  - component: {fileID: 886023929}
+  - component: {fileID: 886023928}
+  - component: {fileID: 886023930}
   m_Layer: 0
   m_Name: Ghost 3
   m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &886023925
 Animator:
   serializedVersion: 3
@@ -6063,6 +6114,51 @@ Transform:
   m_Father: {fileID: 1814670835}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &886023928
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886023924}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Center: {x: 0, y: -1.4, z: 0}
+--- !u!114 &886023929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886023924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49bdb5112772640068639e6d6e11fce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostState: 0
+  state: {fileID: 1948867582}
+  player: {fileID: 630239812}
+  defaultBehaviour: 2
+  spawnColumn: 12
+  spawnRow: 14
+  xSpawnPosition: 1.5
+  ySpawnPosition: 0.5
+--- !u!114 &886023930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 886023924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca098d0290864bea915569884250892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &890264623
 GameObject:
   m_ObjectHideFlags: 0
@@ -6652,13 +6748,16 @@ GameObject:
   - component: {fileID: 1330437927}
   - component: {fileID: 1330437926}
   - component: {fileID: 1330437925}
+  - component: {fileID: 1330437929}
+  - component: {fileID: 1330437928}
+  - component: {fileID: 1330437930}
   m_Layer: 0
   m_Name: Ghost 4
   m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1330437925
 Animator:
   serializedVersion: 3
@@ -6744,6 +6843,51 @@ Transform:
   m_Father: {fileID: 1814670835}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &1330437928
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330437924}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.8
+  m_Center: {x: 0, y: -1.4, z: 0}
+--- !u!114 &1330437929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330437924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49bdb5112772640068639e6d6e11fce0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ghostState: 0
+  state: {fileID: 1948867582}
+  player: {fileID: 630239812}
+  defaultBehaviour: 1
+  spawnColumn: 11
+  spawnRow: 14
+  xSpawnPosition: 2.5
+  ySpawnPosition: 0.5
+--- !u!114 &1330437930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330437924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca098d0290864bea915569884250892, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1347259669
 GameObject:
   m_ObjectHideFlags: 0
@@ -6877,7 +7021,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 97505a7ac5bc04aa59e294064069138b, type: 3}
+    m_Font: {fileID: 12800000, guid: a3acd53f2f6ff48ab9b40812d807769c, type: 3}
     m_FontSize: 20
     m_FontStyle: 1
     m_BestFit: 0
@@ -7376,10 +7520,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ghostState: 0
-  ui: {fileID: 0}
   state: {fileID: 1948867582}
   player: {fileID: 630239812}
-  defualtBehaviour: 0
+  defaultBehaviour: 0
+  spawnColumn: 11
+  spawnRow: 14
+  xSpawnPosition: -2.5
+  ySpawnPosition: 0.5
 --- !u!135 &1938716518
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -7751,7 +7898,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 97505a7ac5bc04aa59e294064069138b, type: 3}
+    m_Font: {fileID: 12800000, guid: a3acd53f2f6ff48ab9b40812d807769c, type: 3}
     m_FontSize: 20
     m_FontStyle: 1
     m_BestFit: 0

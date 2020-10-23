@@ -9,6 +9,7 @@ public class PacStudentController : MonoBehaviour
     [SerializeField]
     AudioClip[] clips;
     int currentClip;
+    int munches;
     AudioSource source;
     float walk = 0.0f;
     [SerializeField]
@@ -223,13 +224,18 @@ public class PacStudentController : MonoBehaviour
 
             if (walk > 0.25f)
             {
-                if (currentClip == 0)
+                if (munches > 0)
                 {
-                    currentClip = 1;
+                    currentClip = 2;
+                    munches--;
+                }
+                else if (currentClip > 0)
+                {
+                    currentClip = 0;
                 }
                 else
                 {
-                    currentClip = 0;
+                    currentClip = 1;
                 }
                 source.clip = clips[currentClip];
                 source.Play();
@@ -251,6 +257,7 @@ public class PacStudentController : MonoBehaviour
         dust.Stop();
         walk = 0.24f;
         stopped = true;
+        munches = 0;
     }
 
     void OnTriggerEnter(Collider other)
@@ -262,6 +269,7 @@ public class PacStudentController : MonoBehaviour
             state.remainingPellets -= 1;
             ui.IncreaseScore(10);
             Destroy(temp);
+            munches = 1;
         }
         if (temp.CompareTag("Cherry"))
         {
@@ -272,12 +280,14 @@ public class PacStudentController : MonoBehaviour
         {
             state.changeToScaredState();
             Destroy(temp);
+            munches = 1;
         }
         if (temp.CompareTag("Actor"))
         {
             if (temp.GetComponent<GhostController>().ghostState == GameStateManager.GameState.Walking)
             {
                 state.KillPacman();
+                animator.speed = 1;
                 animator.SetTrigger("Dead");
                 source.clip = clips[3];
                 source.Play();

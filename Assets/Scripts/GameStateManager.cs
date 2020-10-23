@@ -29,12 +29,13 @@ public class GameStateManager : MonoBehaviour
     PacStudentController player;
     [SerializeField]
     LevelGenerator level;
+    bool ghostsAreRecovering;
     float timer = 0;
     float introLength = 3.541f;
     string[] countDownText = { "3", "2", "1", "GO!" };
     public int remainingPellets = 220;
 
-    public enum GameState { Intro, Walking, Scared, Dead, GameOver };
+    public enum GameState { Intro, Walking, Scared, Dead, GameOver, Recovering };
     public GameState state = GameState.Intro;
 
     // Start is called before the first frame update
@@ -45,6 +46,7 @@ public class GameStateManager : MonoBehaviour
         audiosource.loop = false;
         audiosource.Play();
         ghostTimer.enabled = false;
+        ghostsAreRecovering = false;
     }
 
     // Update is called once per frame
@@ -84,6 +86,16 @@ public class GameStateManager : MonoBehaviour
                 ghostTimer.text = "" + (10 - (int)timer);
                 if (ghostTimer.text.Equals("0"))
                     ghostTimer.text = "1";
+                if (timer > 7 && !ghostsAreRecovering)
+                {
+                    GhostController temp;
+                    foreach (GameObject ghost in ghosts)
+                    {
+                        temp = ghost.GetComponent<GhostController>();
+                        if (temp.ghostState != GameState.Dead)
+                            temp.ghostState = GameState.Recovering;
+                    }
+                }
             }
             else
             {
@@ -92,6 +104,15 @@ public class GameStateManager : MonoBehaviour
                 audiosource.clip = clips[1];
                 audiosource.Play();
                 timer = 0;
+                ghostsAreRecovering = false;
+
+                GhostController temp;
+                foreach (GameObject ghost in ghosts)
+                {
+                    temp = ghost.GetComponent<GhostController>();
+                    if (temp.ghostState != GameState.Dead)
+                        temp.ghostState = GameState.Walking;
+                }
             }
         }
 
@@ -157,11 +178,21 @@ public class GameStateManager : MonoBehaviour
         timer = 0;
         if (state != GameState.Scared)
         {
+            GhostController temp;
+            foreach (GameObject ghost in ghosts)
+            {
+                temp = ghost.GetComponent<GhostController>();
+                if (temp.ghostState != GameState.Dead)
+                    temp.ghostState = GameState.Scared;
+            }
+
             state = GameState.Scared;
             audiosource.clip = clips[2];
             audiosource.Play();
             ghostTimer.enabled = true;
             ghostTimer.text = "10";
+            ghostsAreRecovering = false;
+            
         }
     }
 }
