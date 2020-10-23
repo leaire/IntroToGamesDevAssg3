@@ -20,7 +20,7 @@ public class PacStudentController : MonoBehaviour
     [SerializeField]
     GameStateManager state;
 
-    enum Direction { Up, Down, Left, Right };
+    enum Direction { Up, Down, Right, Left }; // Originally u/d/l/r
 
     float speed = 7.0f;
     Direction lastInput;
@@ -333,13 +333,13 @@ public class PacStudentController : MonoBehaviour
 
     void setInput()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
             lastInput = Direction.Up;
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
             lastInput = Direction.Left;
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))
             lastInput = Direction.Down;
-        if (Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
             lastInput = Direction.Right;
     }
 

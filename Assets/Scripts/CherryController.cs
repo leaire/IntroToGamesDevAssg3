@@ -41,7 +41,7 @@ public class CherryController : MonoBehaviour
                 elapsedTime -= waitTime;
                 // Debug.Log("Cherry spawned");
             }
-            Debug.Log("Time until next cherry spawn: " + (waitTime - elapsedTime));
+            // Debug.Log("Time until next cherry spawn: " + (waitTime - elapsedTime));
         }
     }
 
