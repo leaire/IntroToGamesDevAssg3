@@ -30,7 +30,7 @@ public class PacStudentController : MonoBehaviour
     Animator animator;
     SpriteRenderer rend;
 
-    int[,] levelMap =
+    int[,] levelMap = // Rows 0-14, Columns 0-13
     {
         {1,2,2,2,2,2,2,2,2,2,2,2,2,7},
         {2,5,5,5,5,5,5,5,5,5,5,5,5,4},
@@ -71,10 +71,11 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        rend.sortingOrder = 250 - (int)(gameObject.transform.position.y * 20);
+
         if (state.state != GameStateManager.GameState.Intro && state.state != GameStateManager.GameState.Dead)
         {
             setInput();
-            rend.sortingOrder = (int)gameObject.transform.position.y;
 
             if (!tweener.TweenExists())
             {
@@ -82,6 +83,8 @@ public class PacStudentController : MonoBehaviour
                 else hor = -1;
                 if ((gameObject.transform.position.y) > 0) ver = 1;
                 else ver = -1;
+
+                // gameObject.transform.position = new Vector2(dis * (13.5f - column) * hor, dis * (14.5f - row) * ver);
 
                 if (lastInput == Direction.Up && isWalkable(n))
                 {
@@ -294,6 +297,11 @@ public class PacStudentController : MonoBehaviour
                 dust.Stop();
                 ParticleSystem death = Instantiate(wallImpact, new Vector2(gameObject.transform.position.x, gameObject.transform.position.y), Quaternion.identity);
                 death.transform.localScale = new Vector2(1f, 1f);
+            }
+            else if (temp.GetComponent<GhostController>().ghostState != GameStateManager.GameState.Dead)
+            {
+                temp.GetComponent<GhostController>().killGhost();
+                ui.IncreaseScore(300);
             }
         }
     }

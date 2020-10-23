@@ -29,7 +29,7 @@ public class GameStateManager : MonoBehaviour
     PacStudentController player;
     [SerializeField]
     LevelGenerator level;
-    bool ghostsAreRecovering;
+    public bool ghostsAreRecovering;
     float timer = 0;
     float introLength = 3.541f;
     string[] countDownText = { "3", "2", "1", "GO!" };
@@ -111,7 +111,10 @@ public class GameStateManager : MonoBehaviour
                 {
                     temp = ghost.GetComponent<GhostController>();
                     if (temp.ghostState != GameState.Dead)
+                    {
                         temp.ghostState = GameState.Walking;
+                        temp.behaviour = temp.defaultBehaviour;
+                    }
                 }
             }
         }
@@ -175,24 +178,26 @@ public class GameStateManager : MonoBehaviour
 
     public void changeToScaredState()
     {
+        GhostController temp;
+        foreach (GameObject ghost in ghosts)
+        {
+            temp = ghost.GetComponent<GhostController>();
+            if (temp.ghostState != GameState.Dead)
+            {
+                temp.ghostState = GameState.Scared;
+                temp.behaviour = GhostController.Behaviour.Away;
+            }
+        }
+
         timer = 0;
         if (state != GameState.Scared)
         {
-            GhostController temp;
-            foreach (GameObject ghost in ghosts)
-            {
-                temp = ghost.GetComponent<GhostController>();
-                if (temp.ghostState != GameState.Dead)
-                    temp.ghostState = GameState.Scared;
-            }
-
             state = GameState.Scared;
             audiosource.clip = clips[2];
             audiosource.Play();
             ghostTimer.enabled = true;
             ghostTimer.text = "10";
-            ghostsAreRecovering = false;
-            
         }
+        ghostsAreRecovering = false;
     }
 }

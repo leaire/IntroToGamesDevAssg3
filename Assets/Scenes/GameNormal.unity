@@ -5090,10 +5090,10 @@ GameObject:
   m_Component:
   - component: {fileID: 395399780}
   - component: {fileID: 395399779}
-  - component: {fileID: 395399778}
   - component: {fileID: 395399782}
   - component: {fileID: 395399781}
   - component: {fileID: 395399783}
+  - component: {fileID: 395399778}
   m_Layer: 0
   m_Name: Ghost 2
   m_TagString: Actor
@@ -5215,6 +5215,7 @@ MonoBehaviour:
   state: {fileID: 1948867582}
   player: {fileID: 630239812}
   defaultBehaviour: 1
+  behaviour: 0
   spawnColumn: 12
   spawnRow: 14
   xSpawnPosition: -1.5
@@ -6019,10 +6020,10 @@ GameObject:
   m_Component:
   - component: {fileID: 886023927}
   - component: {fileID: 886023926}
-  - component: {fileID: 886023925}
   - component: {fileID: 886023929}
   - component: {fileID: 886023928}
   - component: {fileID: 886023930}
+  - component: {fileID: 886023925}
   m_Layer: 0
   m_Name: Ghost 3
   m_TagString: Actor
@@ -6143,6 +6144,7 @@ MonoBehaviour:
   state: {fileID: 1948867582}
   player: {fileID: 630239812}
   defaultBehaviour: 2
+  behaviour: 0
   spawnColumn: 12
   spawnRow: 14
   xSpawnPosition: 1.5
@@ -6747,10 +6749,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1330437927}
   - component: {fileID: 1330437926}
-  - component: {fileID: 1330437925}
   - component: {fileID: 1330437929}
   - component: {fileID: 1330437928}
   - component: {fileID: 1330437930}
+  - component: {fileID: 1330437925}
   m_Layer: 0
   m_Name: Ghost 4
   m_TagString: Actor
@@ -6872,6 +6874,7 @@ MonoBehaviour:
   state: {fileID: 1948867582}
   player: {fileID: 630239812}
   defaultBehaviour: 1
+  behaviour: 2
   spawnColumn: 11
   spawnRow: 14
   xSpawnPosition: 2.5
@@ -7412,10 +7415,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1938716516}
   - component: {fileID: 1938716515}
-  - component: {fileID: 1938716514}
   - component: {fileID: 1938716517}
   - component: {fileID: 1938716518}
   - component: {fileID: 1938716519}
+  - component: {fileID: 1938716514}
   m_Layer: 0
   m_Name: Ghost 1
   m_TagString: Actor
@@ -7523,6 +7526,7 @@ MonoBehaviour:
   state: {fileID: 1948867582}
   player: {fileID: 630239812}
   defaultBehaviour: 0
+  behaviour: 0
   spawnColumn: 11
   spawnRow: 14
   xSpawnPosition: -2.5
@@ -7631,6 +7635,7 @@ MonoBehaviour:
   ui: {fileID: 137437102}
   player: {fileID: 630239814}
   level: {fileID: 1729768516}
+  ghostsAreRecovering: 0
   remainingPellets: 220
   state: 0
 --- !u!82 &1948867583

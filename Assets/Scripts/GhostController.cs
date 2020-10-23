@@ -15,15 +15,14 @@ public class GhostController : MonoBehaviour
     Transform player;
 
     enum Direction { Up, Down, Right, Left};
-    enum Behaviour { Away, Toward, Random, Clockwise };
+    public enum Behaviour { Away, Toward, Random, Clockwise };
     static System.Random random = new System.Random();
 
-    float speed = 7.0f;
+    float speed = 7.2f;
     Direction lastInput;
     Direction currentInput;
-    [SerializeField]
-    Behaviour defaultBehaviour;
-    Behaviour behaviour;
+    public Behaviour defaultBehaviour;
+    public Behaviour behaviour;
     Tweener tweener;
     Animator animator;
     SpriteRenderer rend;
@@ -99,30 +98,58 @@ public class GhostController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Ghost 1's state: " + ghostState);
+        // Debug.Log("Ghost 1's state: " + ghostState);
+
+        rend.sortingOrder = 250 - (int)(gameObject.transform.position.y * 20);
 
         if (prevState != ghostState)
         {
             animator.SetInteger("GameState", (int)ghostState);
             prevState = ghostState;
+
+            if (ghostState == GameStateManager.GameState.Walking) speed = 7.2f;
+            if (ghostState == GameStateManager.GameState.Scared || ghostState == GameStateManager.GameState.Recovering) speed = 6f;
         }
 
         // Debug.Log("Up: " + prevAdjacentWalkable[0].ToString() + ", Down: " + prevAdjacentWalkable[1].ToString() + ", Right: " + prevAdjacentWalkable[2].ToString() + ", Left: " + prevAdjacentWalkable[3].ToString());
         if (ghostState == GameStateManager.GameState.Dead)
         {
-            ;
+            if (!tweener.TweenExists())
+            {
+                if (column > 9 && row > 11) // If ghost is in spawn area…
+                {
+                    row = spawnRow; column = spawnColumn;
+                    gameObject.transform.position = new Vector2(xSpawnPosition * dis, ySpawnPosition * dis);
+                    // Debug.Log("Ghost in spawn without tween");
+                    if (state.state == GameStateManager.GameState.Scared)
+                    {
+                        if (state.ghostsAreRecovering)
+                            ghostState = GameStateManager.GameState.Recovering;
+                        else
+                            ghostState = GameStateManager.GameState.Scared;
+                    }
+                    else
+                        ghostState = GameStateManager.GameState.Walking;
+                }
+                else
+                {
+                    // Debug.Log("Ghost tweened back to spawn");
+                    tweener.AddTween(gameObject.transform, gameObject.transform.position, new Vector2(xSpawnPosition, ySpawnPosition), speed * 0.8f);
+                    row = spawnRow; column = spawnColumn;
+                }
+            }
         }
 
         if (state.state != GameStateManager.GameState.Intro && ghostState != GameStateManager.GameState.Dead && state.state != GameStateManager.GameState.Dead)
         {
-            rend.sortingOrder = (int)gameObject.transform.position.y;
-
             if (!tweener.TweenExists())
             {
                 if ((gameObject.transform.position.x) > 0) hor = 1;
                 else hor = -1;
                 if ((gameObject.transform.position.y) > 0) ver = 1;
                 else ver = -1;
+
+                // gameObject.transform.position = new Vector2(dis * (13.5f - column) * hor, dis * (14.5f - row) * ver);
 
                 if (isAtJunction())
                 {
@@ -239,6 +266,12 @@ public class GhostController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void killGhost()
+    {
+        ghostState = GameStateManager.GameState.Dead;
+        animator.SetTrigger("Dead");
     }
 
     bool isAtJunction()
